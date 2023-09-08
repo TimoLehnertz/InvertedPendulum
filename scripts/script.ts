@@ -437,7 +437,7 @@ class PIDController {
         let error: number;
         if(this.isAngleController) {
             error = PIDController.angleFromTo(this.setpoint, measurement);
-            console.log(error * (180/Math.PI), PhysixObject.normalizeAngle(this.setpoint) * (180/Math.PI), PhysixObject.normalizeAngle(measurement) * (180/Math.PI));
+            // console.log(error * (180/Math.PI), PhysixObject.normalizeAngle(this.setpoint) * (180/Math.PI), PhysixObject.normalizeAngle(measurement) * (180/Math.PI));
         } else {
             error = measurement - this.setpoint;
         }
@@ -543,28 +543,28 @@ window.onload = () => {
             return;
         }
 
-        // const maxAngle = Math.PI / 4;
-        // if((pendulum.normalizedRot > -Math.PI + maxAngle) && pendulum.normalizedRot < Math.PI - maxAngle) return;
+        const maxAngle = Math.PI / 4;
+        if((pendulum.normalizedRot > -Math.PI + maxAngle) && pendulum.normalizedRot < Math.PI - maxAngle) return;
 
         posPID.setpoint = setPoint.pos.x;
 
-        // let posPidOut = posPID.update(pos); // angle
+        let posPidOut = posPID.update(pos); // angle
 
-        // posPidOut = Math.atan(posPidOut);
+        posPidOut = Math.atan(posPidOut);
 
-        // angleSetpoint.rot = posPidOut;
+        angleSetpoint.rot = posPidOut;
 
-        // console.log(posPidOut);
+        console.log(posPidOut);
 
-        // const maxCommandedAngle = Math.PI * 0.25;
-        // if(posPidOut < -maxCommandedAngle) posPidOut = -maxCommandedAngle;
-        // if(posPidOut > maxCommandedAngle) posPidOut = maxCommandedAngle;
+        const maxCommandedAngle = Math.PI * 0.25;
+        if(posPidOut < -maxCommandedAngle) posPidOut = -maxCommandedAngle;
+        if(posPidOut > maxCommandedAngle) posPidOut = maxCommandedAngle;
         
-        levelPID.setpoint = setPoint.pos.x - 1 + Math.PI;
+        // levelPID.setpoint = setPoint.pos.x - 1 + Math.PI;
 
         // console.log(PIDController.angleFromTo(pendulum.rot, Math.PI));
         // return;
-        // levelPID.setpoint = posPidOut;
+        levelPID.setpoint = posPidOut;
 
         // console.log(pendulum.rot);
         let levelPIDOut = levelPID.update(pendulum.rot) * (Math.abs(Math.tan(pendulum.rot)) + 1);
